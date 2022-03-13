@@ -24,9 +24,10 @@ const theme = Theme()
 export default function CustomCard(props){
     const [open, setOpen] = React.useState(false);
 
+
     const handleClick = () => {
         setOpen(true);
-        navigator.clipboard.writeText(props.permalink);
+        // navigator.clipboard.writeText(props.permalink);
     };
 
     const handleClose = (event, reason) => {
@@ -37,13 +38,18 @@ export default function CustomCard(props){
         setOpen(false);
     };
 
+    if(props == null) {
+        return (<div/>);
+        //(<Grid item key={props._id} xs={12} sm={12} md={6} ><Grid/>)
+    }
+
     return(
-        <Grid item key={props.id} xs={12} sm={12} md={6}>
+        <Grid item key={props._id} xs={12} sm={12} md={6}>
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardHeader
                 avatar={
                     <Avatar sx={{bgcolor: theme.palette.secondary.main}} aria-label="recipe">
-                        {props.user.username.toUpperCase()[0]}
+                        {/*{props.created_by.username.toUpperCase()[0]}*/}
                     </Avatar>
                 }
                 action={
@@ -51,37 +57,32 @@ export default function CustomCard(props){
                         <FlagIcon />
                     </IconButton>
                 }
-                title={props.user.username}
-                subheader={props.user.user_likes + " ❤"}
+                title={props.created_by.username}
+                subheader={props.created_by.rating + " ❤"}
             />
             <CardMedia
                 component="img"
                 height="300em"
-                image={props.photo_url}
+                image={props.media}
                 alt="krpica"
             />
             <CardContent  sx={{ flexGrow: 1 }}>
                 <Typography variant="h5" color="text.secondary">
-                    Krpica
+                    {props.description}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {props.description}
+                    {props.categories[0]}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                <IconButton aria-label="like">
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share"  onClick={
-                    handleClick
-                }>
+                <IconButton aria-label="like" onClick={handleClick}>
                     <Snackbar
                         open={open}
                         autoHideDuration={1000}
                         onClose={handleClose}
-                        message="Link ka krpici je kopiran!"
+                        message="Lajkovali ste krpicu! Poruka poslata."
                     />
-                    <ShareIcon />
+                    <FavoriteIcon />
                 </IconButton>
             </CardActions>
         </Card>

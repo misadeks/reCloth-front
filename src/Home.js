@@ -34,15 +34,34 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import {AccountCircle} from "@mui/icons-material";
+import axios from 'axios';
+import {useEffect} from "react";
 
 
-const cards = [1, 2, 3, 4, 5];
 
 
 const theme = Theme()
 
 export default function Home() {
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const [items, setItems] = React.useState([]);
+
+    useEffect(() => {
+        (async ()=>{
+                console.log('rerender')
+                axios.get('http://0d04-87-116-175-15.ngrok.io/items').then(res => {
+                    setItems(res.data);
+
+                })
+
+        })()
+
+    }, []);
+
+    const cards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    console.log(cards);
+
 
     const navigate = useNavigate()
 
@@ -83,16 +102,7 @@ export default function Home() {
                             <NotificationsIcon />
                         </IconButton>
                         <IconButton color="inherit">
-                            <IconButton
-                                    size="large"
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
-                                    //onClick={handleMenu}
-                                    color="inherit"
-                                >
                                     <AccountCircle />
-                                </IconButton>
                         </IconButton>
                         <IconButton color="inherit" onClick={handleLogOut}>
                             <LogoutIcon />
@@ -106,19 +116,28 @@ export default function Home() {
                         {/* End hero unit */}
                         <Grid container spacing={4}>
 
-                            {cards.map((card) => (
-                                CustomCard({
-                                    id: 121,
-                                    name: "test",
-                                    description: "Ovo je krpica!",
-                                    permalink: "dknakfj",
-                                    photo_url: "https://source.unsplash.com/random",
-                                    user: {
-                                        username: "ana",
-                                        user_likes: 120
-                                    }
-                                })
-                            ))}
+                            {/*{items == null ?<div/>:CustomCard(items[0])}*/}
+                            {/*{items.length === 0 && <p>No items left.</p>}*/}
+
+
+                            {/*{items == null ? "" : CustomCard(items[0])}*/}
+
+                            {/*{items.map((item) => (<CustomCard props=c))}*/}
+                            {/*{CustomCard(items != null?items[1]:null)}*/}
+
+
+                            {/*{CustomCard(items != null?items[0]:null)}*/}
+
+                            {cards.map((card) => CustomCard(items != null? items[card]:null))}
+
+
+                            {/*{items.map(x => (<CustomCard data={x}/>))}*/}
+                            {/*{items!=null?items.map(x => CustomCard(x)):<div/>}*/}
+                            {/*{CustomCard(items[0])}*/}
+                            {/*{items.map(x => CustomCard(items != null?x:null)) }*/}
+
+                            {/*{items.length > 0 && items.map((card => CustomCard(card)))}*/}
+
                         </Grid>
                     </Container>
                 </main>
