@@ -19,11 +19,13 @@ import PropTypes from 'prop-types';
 
 import Background from "../img/p1.jpg";
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
+import {render} from "react-dom";
 
 const theme = Theme();
 
 async function loginUser(credentials) {
-    return fetch('http://bb2e-87-116-175-21.ngrok.io/users/login', {
+    return fetch('http://709c-87-116-175-15.ngrok.io/users/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -33,11 +35,12 @@ async function loginUser(credentials) {
         .then(data => data.json())
 }
 
-export default function SignInSide({ setToken }) {
-    const [username, setUserName] = useState();
-    const [password, setPassword] = useState();
+export default function SignInSide() {
+    const [failed, setFailed] = useState(false);
 
-    const handleSubmit = (event) => {
+    const navigate = useNavigate()
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         /*
         const data = new FormData(event.currentTarget);
@@ -47,14 +50,20 @@ export default function SignInSide({ setToken }) {
         });
          */
         const data = new FormData(event.currentTarget);
-        const token = loginUser({
+        const response = await loginUser({
             username: data.get('username'),
             password: data.get('password')
         });
-        setToken(token);
+        if (response.success) {
+            localStorage.setItem('user', JSON.stringify(response.user));
+            localStorage.setItem('token', JSON.stringify(response.token));
+            setFailed(false);
+            navigate('/');
+
+        }else{
+            setFailed(true);
+        }
     };
-
-
 
     return (
         <ThemeProvider theme={theme}>
@@ -99,6 +108,9 @@ export default function SignInSide({ setToken }) {
                                 label="Korisničko ime"
                                 name="username"
                                 autoFocus
+                                inputRef={input => input && failed && input.focus()}
+                                helperText={failed ? 'Pogrešna kombinacija korisničkog imena ili lozinke!' :''}
+                                error={failed}
                             />
                             <TextField
                                 margin="normal"
@@ -108,7 +120,7 @@ export default function SignInSide({ setToken }) {
                                 label="Lozinka"
                                 type="password"
                                 id="password"
-                                autoComplete="current-password"
+                                error={failed}
                             />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
@@ -139,7 +151,3 @@ export default function SignInSide({ setToken }) {
         </ThemeProvider>
     );
 }
-
-SignInSide.propTypes = {
-    setToken: PropTypes.func.isRequired
-};

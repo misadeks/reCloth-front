@@ -18,7 +18,7 @@ render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />}/>
-            <Route path="sign-in" element={<SignIn />}/>
+            <Route path="/sign-in" element={<SignIn />}/>
         </Routes>
     </BrowserRouter>
     , rootElement);
