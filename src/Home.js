@@ -15,36 +15,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
-import { teal, purple } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import Theme from "./Theme";
 import CustomCard from './Card';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: teal["A400"],
-        },
-        secondary: {
-            main: purple[500],
-        },
-    },
-});
+const cards = [1, 2, 3, 4, 5];
+
+const theme = Theme()
 
 export default function Home() {
     return (
@@ -69,9 +48,13 @@ export default function Home() {
                             CustomCard({
                                     id: 121,
                                     name: "test",
-                                    likes: 2,
+                                    description: "Ovo je krpica!",
+                                    permalink: "dknakfj",
                                     photo_url: "https://source.unsplash.com/random",
-                                    username: "korisnik"
+                                    user: {
+                                        username: "ana",
+                                        user_likes: 120
+                                    }
                                 })
                         ))}
                     </Grid>
@@ -92,7 +75,6 @@ export default function Home() {
                 >
                     Something here to give the footer a purpose!
                 </Typography>
-                <Copyright />
             </Box>
             {/* End footer */}
         </ThemeProvider>
