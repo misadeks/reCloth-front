@@ -7,6 +7,7 @@ import Card from './Card'
 import SignIn from './routes/SignIn.js'
 import SignUp from './routes/SignUp.js'
 import Landing from './routes/Landing'
+import AddItem from './routes/AddItem'
 
 import { render } from "react-dom";
 import {
@@ -33,7 +34,7 @@ render(
             <Route path="/" element={logged()}/>
             <Route path="/sign-in" element={logged()}/>
             <Route path="/sign-up" element={<SignUp />}/>
-            <Route path="/landing" element={<Landing />}/>
+            <Route path="/add-item" element={<AddItem />}/>
         </Routes>
     </BrowserRouter>
     , rootElement);

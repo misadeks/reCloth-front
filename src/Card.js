@@ -17,16 +17,31 @@ import * as React from "react";
 import {styled} from "@mui/material";
 import Theme from "./Theme";
 import SimpleSnackbar from "./Snackbar";
-
+import backend_url from "./vars";
 
 const theme = Theme()
 
-export default function CustomCard(props){
+async function like(params) {
+    return fetch('http://d613-87-116-175-21.ngrok.io/items/like', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+    })
+        .then(data => data.json())
+}
+
+export default function CustomCard(props,fakeID){
     const [open, setOpen] = React.useState(false);
 
 
     const handleClick = () => {
         setOpen(true);
+        like({
+            "liker_id": JSON.parse(localStorage.getItem("user"))._id,
+            "item_id": props._id
+        })
         // navigator.clipboard.writeText(props.permalink);
     };
 
@@ -39,7 +54,7 @@ export default function CustomCard(props){
     };
 
     if(props == null) {
-        return (<div/>);
+        return (<div  key={fakeID}/>);
         //(<Grid item key={props._id} xs={12} sm={12} md={6} ><Grid/>)
     }
 
@@ -47,18 +62,19 @@ export default function CustomCard(props){
         <Grid item key={props._id} xs={12} sm={12} md={6}>
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardHeader
-                avatar={
+                avatar={props.created_by.rating >= 0 ? (
                     <Avatar sx={{bgcolor: theme.palette.secondary.main}} aria-label="recipe">
-                        {/*{props.created_by.username.toUpperCase()[0]}*/}
-                    </Avatar>
+                        {props.created_by.username.toUpperCase()[0]}
+                    </Avatar>) : ""
                 }
                 action={
+                    props.created_by.rating >= 0 ? (
                     <IconButton aria-label="settings">
                         <FlagIcon />
-                    </IconButton>
+                    </IconButton>) : ""
                 }
                 title={props.created_by.username}
-                subheader={props.created_by.rating + " ❤"}
+                subheader={props.created_by.rating >= 0 ? props.created_by.rating + " ❤" : ""}
             />
             <CardMedia
                 component="img"
@@ -72,8 +88,11 @@ export default function CustomCard(props){
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {props.categories[0]}
+                    {props.created_by.rating >= 0 ? (<br/>) : ""}
+                    {props.created_by.rating >= 0 ? "Veličina: " + props.size : ""}
                 </Typography>
             </CardContent>
+            {props.created_by.rating >= 0 ? (
             <CardActions disableSpacing>
                 <IconButton aria-label="like" onClick={handleClick}>
                     <Snackbar
@@ -84,7 +103,8 @@ export default function CustomCard(props){
                     />
                     <FavoriteIcon />
                 </IconButton>
-            </CardActions>
+            </CardActions>) : ""
+            }
         </Card>
         </Grid>
         );

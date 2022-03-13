@@ -36,7 +36,7 @@ import { Navigate } from "react-router-dom";
 import {AccountCircle} from "@mui/icons-material";
 import axios from 'axios';
 import {useEffect} from "react";
-
+import backend_url from "./vars"
 
 
 
@@ -46,11 +46,12 @@ export default function Home() {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const [items, setItems] = React.useState([]);
+    const [quote, setQuote] = React.useState({});
 
     useEffect(() => {
         (async ()=>{
                 console.log('rerender')
-                axios.get('http://0d04-87-116-175-15.ngrok.io/items').then(res => {
+                axios.get('http://d613-87-116-175-21.ngrok.io/items').then(res => {
                     setItems(res.data);
 
                 })
@@ -59,9 +60,55 @@ export default function Home() {
 
     }, []);
 
-    const cards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    console.log(cards);
 
+    useEffect(() => {
+        (async ()=>{
+            console.log('rerender')
+            axios.get('http://d613-87-116-175-21.ngrok.io/quote').then(res => {
+                setQuote(res.data);
+            })
+
+        })()
+
+    }, []);
+
+    const cards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    if(quote.text !== undefined) {
+       items.splice(5, 0, {
+                "_id": "quote",
+                "created_by": {
+                    "_id": "622dbe95d5c1478b8340db05",
+                    "rating": -1,
+                    "first_name": "",
+                    "last_name": "",
+                    "phone": "060 664 7525",
+                    "email": "nicholas7@yahoo.com",
+                    "username": "",
+                    "password": "$2b$10$E8ppkP5xQuwKbjmC.NdWg.fdYmo/9nKasHB70kWbW7ExQqBcxY0Ie",
+                    "clothes": [
+                        "622dbe9c95bbf2b78aafa0f1",
+                        "622dbe9c95bbf2b78aafa10f",
+                        "622dbe9d95bbf2b78aafa12d"
+                    ],
+                    "messages": [],
+                    "__v": 0
+                },
+                "description": "Fun fact",
+                "size": "",
+                "media": "https://etgroup.cz/wp-content/uploads/2017/11/Collection-Textile.png",
+                "liked": false,
+                "categories": [`${quote.text}`]
+                ,
+                "date_created": "2022-03-13T09:51:24.834Z",
+                "date_modified": "2022-03-13T09:51:24.834Z",
+                "__v": 0
+            }
+        );
+
+    }
+    if(items.length > 13){
+        items.splice(9, 1);
+    }
 
     const navigate = useNavigate()
 
@@ -82,6 +129,7 @@ export default function Home() {
     const handleHome = () => {
         navigate(0);
     };
+    console.log(items)
 
         return (
             <ThemeProvider theme={theme}>
@@ -91,10 +139,7 @@ export default function Home() {
                             <IconButton color="inherit" aria-label="open drawer">
                                 <HomeIcon onClick={handleHome} />
                             </IconButton>
-                        <IconButton color="inherit" aria-label="open drawer">
-                            <FavoriteIcon />
-                        </IconButton>
-                        <StyledFab color="secondary" aria-label="add">
+                        <StyledFab color="secondary" aria-label="add" onClick={() => navigate('/add-item')}>
                             <AddIcon />
                         </StyledFab>
                         <Box sx={{ flexGrow: 1 }} />
@@ -128,7 +173,7 @@ export default function Home() {
 
                             {/*{CustomCard(items != null?items[0]:null)}*/}
 
-                            {cards.map((card) => CustomCard(items != null? items[card]:null))}
+                            {cards.map((card) => CustomCard(items != null? items[card]:null,card))}
 
 
                             {/*{items.map(x => (<CustomCard data={x}/>))}*/}

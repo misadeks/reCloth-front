@@ -23,11 +23,12 @@ import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 import {render} from "react-dom";
+import host_url from "../vars"
 
 const theme = Theme();
 
 async function loginUser(credentials) {
-    return fetch('http://0d04-87-116-175-15.ngrok.io/users/login', {
+    return fetch('http://d613-87-116-175-21.ngrok.io/users/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -98,6 +99,9 @@ export default function SignInSide() {
                             alignItems: 'center',
                         }}
                     >
+                        <Typography component="h1" variant="h4" color={theme.palette.primary.dark} sx={{mb: 3}}>
+                            reCloth
+                        </Typography>
                         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                             <LockOutlinedIcon />
                         </Avatar>

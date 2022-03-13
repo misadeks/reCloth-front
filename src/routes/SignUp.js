@@ -39,6 +39,9 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
+                    <Typography component="h1" variant="h4" color={theme.palette.primary.dark} sx={{mb: 3}}>
+                        reCloth
+                    </Typography>
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                         <LockOutlinedIcon />
                     </Avatar>

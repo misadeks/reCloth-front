@@ -1,0 +1,1 @@
+const backend_url = "http://d613-87-116-175-21.ngrok.io";
