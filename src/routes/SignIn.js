@@ -20,6 +20,8 @@ import PropTypes from 'prop-types';
 import Background from "../img/p1.jpg";
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+
 import {render} from "react-dom";
 
 const theme = Theme();
@@ -40,6 +42,8 @@ export default function SignInSide() {
 
     const navigate = useNavigate()
 
+    const textInput = React.useRef(null);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         /*
@@ -58,10 +62,11 @@ export default function SignInSide() {
             localStorage.setItem('user', JSON.stringify(response.user));
             localStorage.setItem('token', JSON.stringify(response.token));
             setFailed(false);
-            navigate('/');
+            navigate(0);
 
         }else{
             setFailed(true);
+            textInput.current.value = "";
         }
     };
 
@@ -121,10 +126,7 @@ export default function SignInSide() {
                                 type="password"
                                 id="password"
                                 error={failed}
-                            />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Zapamti me"
+                                inputRef={textInput}
                             />
                             <Button
                                 type="submit"
@@ -139,7 +141,7 @@ export default function SignInSide() {
                             </Button>
                             <Grid container>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link href="/sign-up" variant="body1">
                                         {"Nemaš nalog? Napravi nalog"}
                                     </Link>
                                 </Grid>
